@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poling Officer Panel </title>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Custom CSS -->
+<style>
+  body {
+    background-color: #f7f7f7;
+    font-family: 'Arial', sans-serif;
+  }
+
+  .container {
+    max-width: 600px;
+    background-color: white;
+    padding: 20px;
+    margin-top: 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .btn-custom {
+    background-color: #007bff;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 24px;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-custom:hover {
+    background-color: #0056b3;
+  }
+
+  .form-control {
+    border-radius: 20px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .form-group input {
+    font-size: 16px;
+  }
+</style>
+
+<script>
+function addUser() {
+  var userName = document.getElementById('UserID').value;
+  var userEmail = document.getElementById('password').value;
+}
+
+function button1Action() {
+  alert("Button 1 clicked!");
+}
+
+function button2Action() {
+  alert("Button 2 clicked!");
+}
+</script>
+</head>
+<body>
+<div class="container">
+  <h2>User Information</h2>
+  <form method="post" id="addUserForm">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="userName">User id</label>
+      <input type="text" class="form-control" id="UserID" name="userid">
+    </div>
+    <div class="form-group">
+      <label for="userEmail">Password</label>
+      <input type="password" class="form-control" id="password" name="Password">
+    </div>
+    <button type="button" class="btn btn-custom" onclick="addUser()">Add User</button>
+  </form>  
+  <br>
+  <button type="button" class="btn btn-custom" onclick="showResults()">Show Results</button>
+  <button type="button" class="btn btn-custom" onclick="resetVotes()">Reset Votes</button>
+  <button type="button" class="btn btn-custom" onclick="logout()">Log Out</button>
+  <div id="results"></div>
+</div>
+<script>
+    function addUser() {
+  var userName = document.getElementById('UserID').value;
+  var password = document.getElementById('password').value;
+  
+  // Create a FormData object to send the data via POST
+  var formData = new FormData();
+  formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); // Add CSRF token
+  formData.append('userid', userName);
+  formData.append('Password', password);
+
+  // Send a POST request to the server using fetch
+  fetch("{% url 'add_user' %}", {
+    method: 'POST',
+    body: formData,
+    credentials: 'same-origin', // Include cookies in the request
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // User added successfully, display an alert
+      alert('User added successfully');
+      // Clear input fields
+      document.getElementById('UserID').value = '';
+      document.getElementById('password').value = '';
+    } else {
+      // Handle error if user addition failed
+      alert('User addition failed');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred');
+  });
+}
+
+function showResults() {
+  // Send a GET request to the server
+  fetch("{% url 'show_results' %}")
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);  // Display the message in a single alert box
+      } else {
+        alert("No votes have been recorded yet.");
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+function resetVotes() {
+  const enteredPassword = prompt("Please enter the password to reset votes:");
+
+  if (enteredPassword === null) {
+    // User canceled the password prompt
+    return;
+  }
+
+  // Send a POST request to the server to reset votes
+  fetch("{% url 'reset_votes' %}", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'), // Include the CSRF token
+    },
+    body: JSON.stringify({ password: enteredPassword }), // Send entered password to the server
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Password was correct, reset votes successfully
+      alert('Votes reset successfully');
+    } else {
+      // Password was incorrect
+      alert('Password is incorrect. Votes reset failed.');
+    }
+  });
+}
+
+
+// Function to get the CSRF token
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function logout() {
+  window.location.href = "{% url 'index' %}";
+}
+
+    </script>
+    
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

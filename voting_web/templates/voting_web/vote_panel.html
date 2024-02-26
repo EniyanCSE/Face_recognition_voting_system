@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Voting Software</title>
+
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body style="height: 100%; width: 100%;">
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header style="text-align: center;">
+      <br>
+      <br>
+      
+      <h1>
+        Register your votes
+      </h1>
+    </header>
+    <!-- end header section -->
+    <!-- slider section -->
+    <section class="slider_section ">
+      <div class="container ">
+        <div class="row">
+          <div class="col-md-6 ">
+          </div>
+          <div class="col-md-6">
+            <div class="img-box">
+              <img src="{% static 'images/slider-img-trans.png' %}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end slider section -->
+  </div>
+
+  <!-- feature section -->
+  <section class="feature_section">
+    <div class="container">
+      <div class="feature_container">
+        <div class="box">
+          <a class="img-box" data-color="Red">
+            <div style="width: 100px; height: 100px; background-color: red; align-self: center;"></div>
+          </a>
+          <h5 class="name">
+            <a>RED</a>
+          </h5>
+        </div>
+        <div class="box">
+          <a class="img-box" data-color="Blue">
+            <div style="width: 100px; height: 100px; background-color: blue; align-self: center;"></div>
+          </a>
+          <h5 class="name">
+            <a >BLUE</a>
+          </h5>
+        </div>
+        <div class="box">
+          <a class="img-box" data-color="Green">
+            <div style="width: 100px; height: 100px; background-color: green; align-self: center;"></div>
+          </a>
+          <h5 class="name">
+            <a>GREEN</a>
+          </h5>
+        </div>
+        <div class="box">
+          <a class="img-box" data-color="Black">
+            <div style="width: 100px; height: 100px; background-color: black; align-self: center;"></div>
+          </a>
+          <h5 class="name">
+            <a>BLACK</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer_section custom-footer">
+    <div class="container">
+      <p>
+        &copy; <span id="displayDateYear"></span> All Rights Reserved By
+        <a>Voting software</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+  <script>
+    // Get all color boxes with a data-color attribute
+    const colorBoxes = document.querySelectorAll('[data-color]');
+    
+    // Add a click event listener to each color box
+    colorBoxes.forEach(box => {
+        box.addEventListener('click', function() {
+            const selectedColor = this.getAttribute('data-color');
+            
+            // Send a POST request to the server to increase the vote count
+            fetch('/myapp/increase_vote/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Include the CSRF token
+                },
+                body: JSON.stringify({ color: selectedColor }), // Send selected color to the server
+            })
+            .then(response => response.json())  // Parse the response as JSON
+.then(data => {
+    if (data.success) {
+        // Vote count increased successfully, you can display a message or update the UI
+        alert(`You voted for ${selectedColor}.`);
+        window.location.href = "{% url 'index' %}";   
+    } else {
+        // Handle error if vote counting failed
+        alert('Voting failed.');
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred while voting.');
+});
+        });
+    });
+
+    // Function to get the CSRF token
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+  </script>
+
+  <!-- Include jQuery from CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Include Bootstrap JavaScript from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Include OwlCarousel2 from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+  <!-- Include your custom JavaScript file from the static directory -->
+  <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>

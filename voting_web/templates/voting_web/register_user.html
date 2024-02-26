@@ -1,0 +1,159 @@
+{% load static %}
+{% if reg_messages %}
+    <div class="alert alert-danger">
+        {% for message in reg_messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Registration - Voting Software</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+    <style>
+        /* Additional styles for the camera view */
+        .wrapper {
+            text-align: center;
+        }
+
+        #cameraContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #cameraView {
+            width: 100%;
+            max-width: 640px; /* Adjust the maximum width as needed */
+            display: block;
+            border: 2px solid #333;
+        }
+
+        #captureButton {
+            margin-top: 10px;
+            display: none;
+        }
+
+        #capturedImage {
+            max-width: 100%;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Additional styles for the form */
+        .form-signin {
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <form class="form-signin" id="registrationForm" action="{% url 'register_user' %}" method="post">  
+            {% csrf_token %}
+            <h2 class="form-signin-heading">Voter Registration</h2>
+            <input type="text" class="form-control" name="voterID" id="voterID" placeholder="Voter ID" required="" autofocus="" />
+            
+            <!-- Add the input field for Digital ID -->
+            <input type="text" class="form-control" name="digitalID" id="digitalID" placeholder="Digital ID" required="" />
+            
+            <div class="camera-container">
+                <video id="cameraView" autoplay></video>
+                <img id="capturedImage" src="" alt="Captured Image" style="max-width: 100%; margin-top: 10px; display: none;">
+                <button type="button" id="captureButton" class="btn btn-primary">Capture</button>
+                <button type="button" id="recaptureButton" class="btn btn-secondary">Recapture</button>
+            </div>
+            <input type="hidden" id="capturedImageData" name="capturedImageData">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>   
+        </form>
+    </div>
+    
+    <!-- Include Bootstrap JavaScript and jQuery -->
+    <!-- ... (previous code) ... -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include Bootstrap JavaScript from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Include OwlCarousel2 from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script>
+        // Get references to the HTML elements
+        const cameraView = document.getElementById('cameraView');
+        const captureButton = document.getElementById('captureButton');
+        const capturedImage = document.getElementById('capturedImage');
+        const capturedImageData = document.getElementById('capturedImageData');
+        const recaptureButton = document.getElementById('recaptureButton');
+        
+        // Function to reset the camera view
+        function resetCameraView() {
+            capturedImage.style.display = 'none';
+            cameraView.style.display = 'block';
+            captureButton.style.display = 'block';
+            recaptureButton.style.display = 'none';
+        }
+        
+        // Check if the browser supports the getUserMedia API
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }) // Access the camera
+                .then(function (stream) {
+                    // Display the camera stream in the video element
+                    cameraView.srcObject = stream;
+                    
+                    // Enable the "Capture Picture" button
+                    captureButton.style.display = 'block';
+                    
+                    // Add click event listener to capture button
+                    captureButton.addEventListener('click', function () {
+                        // Capture a frame from the video stream
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.width = cameraView.videoWidth;
+                        canvas.height = cameraView.videoHeight;
+                        context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
+                        
+                        // Convert the captured image to a data URL (JPEG)
+                        canvas.toBlob(function(blob) {
+                            const reader = new FileReader();
+                            reader.onloadend = function() {
+                                capturedImage.src = reader.result;
+                                capturedImage.style.display = 'block';
+                                cameraView.style.display = 'none';
+                                captureButton.style.display = 'none';
+                                recaptureButton.style.display = 'block';
+                                
+                                // Set the captured image data in the hidden input field
+                                capturedImageData.value = reader.result;
+                            };
+                            reader.readAsDataURL(blob);
+                        }, 'image/jpeg');
+                    });
+                    
+                    // Add click event listener to recapture button
+                    recaptureButton.addEventListener('click', function () {
+                        resetCameraView();
+                    });
+                })
+                .catch(function (error) {
+                    console.error('Error accessing the camera:', error);
+                });
+        } else {
+            alert('Your browser does not support camera access.');
+        }
+    </script>
+</body>
+</html>

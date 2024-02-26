@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Voting Software</title>
+
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body style="height: 100%; width: 100%;">
+  <div class="hero_area">
+    <!-- header section starts -->
+    <!-- end header section -->
+    <!-- slider section -->
+    <section class="slider_section ">
+      <div class="container ">
+        <div class="row">
+          <div class="col-md-6 ">
+            <div class="detail-box">
+              <h1>
+                Voter and Admin<br>
+                Panel
+              </h1>
+              <p>
+                Choose your login mode. You will be given access according to your login authority rights. If you're a normal voter, please feel free to press the voter button, and you can register your votes.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="img-box" style="padding-left: 50%; padding-top: 20%; padding-bottom: 5%;">
+              <img src="{% static 'images/slider-img.png' %}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end slider section -->
+  </div>
+
+  <!-- feature section -->
+  <section class="feature_section">
+    <div class="container">
+      <div class="feature_container">
+        <div class="box" style="cursor: pointer;" id="userLoginLink">
+          <div class="img-box" id="userLoginLink">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M96 80c0-26.5 21.5-48 48-48H432c26.5 0 48 21.5 48 48V384H96V80zm313 47c-9.4-9.4-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L409 161c9.4-9.4 9.4-24.6 0-33.9zM0 336c0-26.5 21.5-48 48-48H64V416H512V288h16c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V336z"/></svg>
+          </div>
+          <h5 class="name" id="userLoginLink">
+            Voter
+          </h5>
+        </div>
+        <div class="box" style="cursor: pointer;" id="userRegistrationLink">
+          <div class="img-box" id="userRegistrationLink">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M96 128a128 128 0 1 0 256 0A128 128 0 1 0 96 128zm94.5 200.2l18.6 31L175.8 483.1l-36-146.9c-2-8.1-9.8-13.4-17.9-11.3C51.9 342.4 0 405.8 0 481.3c0 17 13.8 30.7 30.7 30.7H162.5c0 0 0 0 .1 0H168 280h5.5c0 0 0 0 .1 0H417.3c17 0 30.7-13.8 30.7-30.7c0-75.5-51.9-138.9-121.9-156.4c-8.1-2-15.9 3.3-17.9 11.3l-36 146.9L238.9 359.2l18.6-31c6.4-10.7-1.3-24.2-13.7-24.2H224 204.3c-12.4 0-20.1 13.6-13.7 24.2z"/></svg>
+              <!-- Add your SVG path here -->
+            </svg>
+          </div>
+          <h5 class="name" id="userRegistrationLink">
+            user<br>(Registration)
+          </h5>
+        </div>
+        <div class="box" style="cursor: pointer;" id="superAdminLink">
+          <div class="img-box" id="superAdminLink">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
+              <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/>
+            </svg>
+          </div>
+          <h5 class="name" id="superAdminLink">
+            Super Admin<br>(Polling Officer)
+          </h5>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        &copy; <span id="displayDateYear"></span> All Rights Reserved By
+        <a href="#">Voting software</a>
+      </p>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <script>
+    // Get the "Super Admin" link by its id
+    var superAdminLink = document.getElementById("superAdminLink");
+  
+    // Add a click event listener to the "Super Admin" link
+    superAdminLink.addEventListener("click", function() {
+      // Redirect to login_po.html when the link is clicked
+      window.location.href = "{% url 'login' %}";
+    });
+
+    // Get the "User Registration" link by its id
+  var registerUserLink = document.getElementById("userRegistrationLink");
+
+  // Add a click event listener to the "User Registration" link
+  registerUserLink.addEventListener("click", function() {
+    // Redirect to the "register_user" page when the link is clicked
+    window.location.href = "{% url 'register_user' %}";
+  });
+
+      // Get the "User Registration" link by its id
+      var registerUserLink = document.getElementById("userLoginLink");
+
+      // Add a click event listener to the "User Registration" link
+    registerUserLink.addEventListener("click", function() {
+      // Redirect to the "register_user" page when the link is clicked
+      window.location.href = "{% url 'user_login' %}";
+  });
+
+  </script>
+
+  <!-- Include jQuery from CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Include Bootstrap JavaScript from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Include OwlCarousel2 from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+  <!-- Include your custom JavaScript file from the static directory -->
+  <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+
+</html>
